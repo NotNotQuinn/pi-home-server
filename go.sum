@@ -1,3 +1,5 @@
+github.com/NotNotQuinn/keylogger v0.0.0-20220404222457-8bd7996336fc h1:3iBQa7VgOfaIfBtBx/3NmRu16TNjYJujCA/DBKDwKN8=
+github.com/NotNotQuinn/keylogger v0.0.0-20220404222457-8bd7996336fc/go.mod h1:BqEXW6C9ymEIAClBdOuKThf4of8Xws3E/piJBFeSxz8=
 github.com/coreos/go-systemd/v22 v22.3.2/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSVTIJ3seZv2GcEnc=
 github.com/godbus/dbus/v5 v5.0.4/go.mod h1:xhWf0FNVPg57R7Z0UbKHbJfkEywrmjJnf7w5xrFpKfA=
 github.com/google/uuid v1.3.0 h1:t6JiXgmwXMjEs8VusXIJk2BXHsn+wx8BZdTaoZ5fu7I=
