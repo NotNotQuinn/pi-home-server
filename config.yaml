@@ -1,0 +1,9 @@
+---
+
+hub:
+  port: 8080
+  url: http://desktop.qdt.home.arpa:8080/
+
+keylogger:
+  port: 8081
+  url: http://pi1.qdt.home.arpa:8081/
