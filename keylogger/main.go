@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/NotNotQuinn/keylogger"
 	"github.com/notnotquinn/pi-home-server/config"
@@ -55,7 +56,9 @@ func main() {
 
 	// Add an emitter to create events
 	events := make(chan keys.Event)
-	wts.AddEmitter(n, wts.NewBasicEmitter("wait a sec", events))
+	wts.AddEmitter(n, wts.NewBasicEmitter("keylogger", events))
+
+	time.Sleep(time.Second)
 
 	// Read keys
 	ch := logger.Read()
@@ -78,8 +81,6 @@ func main() {
 			}(key, v)
 		}
 	}
-
-	close(ch)
 }
 
 // keyFromStr gets a key from the string output by the keylogger package
