@@ -7,8 +7,8 @@ import (
 )
 
 type Config struct {
-	Hub       Service `yaml:"hub"`
-	Keylogger Service `yaml:"keylogger"`
+	Hub       Service       `yaml:"hub"`
+	Keylogger LoggerService `yaml:"keylogger"`
 }
 
 // A service represents a specification for a specific service
@@ -17,6 +17,13 @@ type Service struct {
 	URL  string `yaml:"url"`
 }
 
+// LoggerService is a logger config
+type LoggerService struct {
+	Service    `yaml:"service,inline"`
+	DeviceName string `yaml:"deviceName"`
+}
+
+// Load loads the config from the specified YAML config file
 func Load(filePath string) (*Config, error) {
 	bytes, err := os.ReadFile(filePath)
 	if err != nil {
