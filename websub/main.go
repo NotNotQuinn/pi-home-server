@@ -1,4 +1,4 @@
-package main
+package websub
 
 import (
 	"fmt"
@@ -11,10 +11,10 @@ import (
 
 var log = websub.Logger()
 
-func main() {
+func Run() error {
 	c, err := config.Load("./config.yaml")
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	h := websub.NewHub(c.Hub.URL,
@@ -34,7 +34,5 @@ func main() {
 		fmt.Printf("Publish (%d): %s (%s)\n  %s\n", count, topic, contentType, string(content))
 	})
 
-	http.ListenAndServe(fmt.Sprintf(":%d", c.Hub.Port), h)
-
-	<-make(chan struct{})
+	return http.ListenAndServe(fmt.Sprintf(":%d", c.Hub.Port), h)
 }
