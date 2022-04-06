@@ -24,12 +24,14 @@ func main() {
 		websub.HubWithHashFunction("sha512"),
 	)
 
+	count := 0
 	h.AddSniffer("", func(topic, contentType string, body io.Reader) {
+		count++
 		content, err := io.ReadAll(body)
 		if err != nil {
 			log.Err(err).Msg("could not read publish body")
 		}
-		fmt.Printf("Publish: %s (%s)\n  %s\n", topic, contentType, string(content))
+		fmt.Printf("Publish (%d): %s (%s)\n  %s\n", count, topic, contentType, string(content))
 	})
 
 	http.ListenAndServe(fmt.Sprintf(":%d", c.Hub.Port), h)

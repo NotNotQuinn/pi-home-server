@@ -1,12 +1,12 @@
-package main
+package keylogger
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/NotNotQuinn/keylogger"
 	"github.com/notnotquinn/pi-home-server/config"
@@ -15,7 +15,9 @@ import (
 )
 
 // FindKeyboardDevice gets the keyboard device path to listen to
-func FindKeyboardDevice() string {
+//
+// Case insentive, exact match.
+func FindKeyboardDevice(name string) string {
 	path := "/sys/class/input/event%d/device/name"
 	resolved := "/dev/input/event%d"
 
@@ -29,7 +31,7 @@ func FindKeyboardDevice() string {
 
 		//fmt.Printf("Device: %q\n", deviceName)
 
-		if deviceName == "mosart semi. 2.4g wireless keypad\n" {
+		if deviceName == strings.ToLower(name)+"\n" {
 			return fmt.Sprintf(resolved, i)
 		}
 	}
@@ -37,17 +39,22 @@ func FindKeyboardDevice() string {
 	return ""
 }
 
-func main() {
+func Run(ctx context.Context) error {
 	// Load config
 	c, err := config.Load("./config.yaml")
 	if err != nil {
-		panic(err)
+		return err
+	}
+
+	file := FindKeyboardDevice(c.Keylogger.DeviceName)
+	if file == "" {
+		return errors.New("could not find device with configured name")
 	}
 
 	// Get a key logger
-	logger, err := keylogger.New(FindKeyboardDevice())
+	logger, err := keylogger.New(file)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	// Create a node
@@ -58,27 +65,30 @@ func main() {
 	events := make(chan keys.Event)
 	wts.AddEmitter(n, wts.NewBasicEmitter("keylogger", events))
 
-	time.Sleep(time.Second)
-
 	// Read keys
 	ch := logger.Read()
-	for v := range ch {
-		if keystr := v.KeyString(); v.Type == keylogger.EvKey &&
-			keystr != "NUM_LOCK" && (v.Value == 1 || v.Value == 0) {
-			key, err := keyFromString(keystr)
-			if err != nil {
-				continue
-			}
-
-			// Send key events
-			go func(key keys.Key, v keylogger.InputEvent) {
-				fmt.Printf("%s - %d", key, v.Value)
-
-				events <- keys.Event{
-					Key:  key,
-					Mode: keys.KeyMode(v.Value),
+	for {
+		select {
+		case v := <-ch:
+			if keystr := v.KeyString(); v.Type == keylogger.EvKey &&
+				keystr != "NUM_LOCK" && (v.Value == 1 || v.Value == 0) {
+				key, err := keyFromString(keystr)
+				if err != nil {
+					continue
 				}
-			}(key, v)
+
+				// Send key events
+				go func(key keys.Key, v keylogger.InputEvent) {
+					fmt.Printf("%s - %d\n", key, v.Value)
+
+					events <- keys.Event{
+						Key:  key,
+						Mode: keys.KeyMode(v.Value),
+					}
+				}(key, v)
+			}
+		case <-ctx.Done():
+			return nil
 		}
 	}
 }
