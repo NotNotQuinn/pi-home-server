@@ -7,3 +7,4 @@ hub:
 keylogger:
   port: 8081
   url: http://pi1.qdt.home.arpa:8081/
+  deviceName: MOSART SEMI. 2.4G Wireless Keypad
