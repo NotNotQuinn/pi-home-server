@@ -6,7 +6,7 @@ require github.com/notnotquinn/go-websub v0.2.1-0.20220402014223-244234a01c89
 
 require github.com/NotNotQuinn/keylogger v0.0.0-20220404222457-8bd7996336fc
 
-require github.com/notnotquinn/wts v0.0.0-20220404135028-3494746ee095 // indirect
+require github.com/notnotquinn/wts v0.0.0-20220404135028-3494746ee095
 
 require (
 	github.com/google/uuid v1.3.0 // indirect
