@@ -82,8 +82,9 @@ func Run(ctx context.Context) error {
 					fmt.Printf("%s - %d\n", key, v.Value)
 
 					events <- keys.Event{
-						Key:  key,
-						Mode: keys.KeyMode(v.Value),
+						Key:               key,
+						KeyRepresentation: keys.KeyToRepresentation[key],
+						Mode:              keys.KeyMode(v.Value),
 					}
 				}(key, v)
 			}

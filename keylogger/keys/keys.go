@@ -59,3 +59,53 @@ const (
 	BACKSPACE Key = "KEY_BACKSPACE"
 	DOT       Key = "KEY_DOT"
 )
+
+// KeyToRepresentation stores a user-facing key name for
+// each key.
+//
+// For keys that have characters, the character is used.
+// For other keys (like enter or insert) an all uppercase name is used.
+var KeyToRepresentation = map[Key]string{
+	// Number keys
+
+	NUMPAD_0: "0",
+	NUMPAD_1: "1",
+	NUMPAD_2: "2",
+	NUMPAD_3: "3",
+	NUMPAD_4: "4",
+	NUMPAD_5: "5",
+	NUMPAD_6: "6",
+	NUMPAD_7: "7",
+	NUMPAD_8: "8",
+	NUMPAD_9: "9",
+
+	// Math keys
+
+	PLUS:     "+",
+	DASH:     "-",
+	ASTERISK: "*",
+	SLASH:    "/",
+	EQUALS:   "=",
+
+	// Arrow keys
+
+	UP:    "UP",
+	DOWN:  "DOWN",
+	LEFT:  "LEFT",
+	RIGHT: "RIGHT",
+
+	// Navigation keys
+
+	HOME:     "HOME",
+	END:      "END",
+	PAGEUP:   "PAGEUP",
+	PAGEDOWN: "PAGEDOWN",
+	INSERT:   "INSERT",
+	DELETE:   "DELETE",
+
+	// Other keys
+
+	ENTER:     "ENTER",
+	BACKSPACE: "BACKSPACE",
+	DOT:       ".",
+}
